@@ -1,0 +1,19 @@
+{
+    "folders":[
+        {
+            "path": "OrderService"
+        },
+        {
+            "path": "MailService"
+        },
+        {
+            "path": "Dispatcher"
+        },
+        {
+            "path": "Shared"
+        },
+        {
+            "path":"OutboxService"
+        }
+    ]
+}
