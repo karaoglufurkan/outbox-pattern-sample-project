@@ -1,15 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using OrderService.Models;
 using Shared.Models;
 
-namespace OrderService.Data
+namespace Dispatcher.Data
 {
-    public class OrderDbContext : DbContext
+    public class DispatcherDbContext : DbContext
     {
-        public DbSet<Order> Orders { get; set; }
         public DbSet<OutboxEvent> OutboxEvents { get; set; }
 
-        public OrderDbContext(DbContextOptions options) : base(options)
+        public DispatcherDbContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -17,7 +15,6 @@ namespace OrderService.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OutboxEvent>().ToTable("OutboxEvents");
-            modelBuilder.Entity<Order>().ToTable("Orders");
         }
     }
 }

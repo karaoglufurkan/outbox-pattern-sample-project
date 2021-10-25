@@ -13,7 +13,7 @@
             "path": "Shared"
         },
         {
-            "path":"OutboxService"
+            "path": "ShipmentService"
         }
     ]
 }

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace OutboxService
+namespace ShipmentService
 {
     public class Program
     {
@@ -20,7 +20,7 @@ namespace OutboxService
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>().UseUrls("http://localhost:6001");
+                    webBuilder.UseStartup<Startup>().UseUrls("http://localhost:5003");
                 });
     }
 }

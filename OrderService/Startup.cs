@@ -35,19 +35,18 @@ namespace OrderService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OrderService", Version = "v1" });
             });
             services.AddDbContext<OrderDbContext>(builder => {
-                builder.UseSqlite(@"Data Source=order.db");
+                builder.UseSqlServer(Configuration.GetConnectionString("DemoDb"));
             });
 
             services.AddScoped<IOrderBusiness, OrderBusiness>();
-            services.AddHttpClient<IOrderBusiness, OrderBusiness>();
+            // services.AddHttpClient<IOrderBusiness, OrderBusiness>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OrderDbContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                context.Database.EnsureCreated();
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrderService v1"));

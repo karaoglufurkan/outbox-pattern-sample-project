@@ -33,9 +33,9 @@ namespace OrderService.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateOrder(CreateOrderRequestModel request)
+        public async Task<IActionResult> CreateOrder(CreateOrderRequestModel request)
         {
-            _orderBusiness.CreateOrderAsync(request);
+            await _orderBusiness.CreateOrderAsync(request);
             return Ok();
         }
     }

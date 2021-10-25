@@ -1,25 +1,20 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using OrderService.Data;
 using OrderService.Models;
 using Shared.Events;
-using Shared.Managers;
+using Shared.Models;
 
 namespace OrderService.Business
 {
     public class OrderBusiness : IOrderBusiness
     {
-        private HttpClient _client;
-        private OrderDbContext _context;
+        private readonly OrderDbContext _context;
 
-        public OrderBusiness(HttpClient client, OrderDbContext context)
+        public OrderBusiness(OrderDbContext context)
         {
-            _client = client;
             _context = context;
         }
 
@@ -37,35 +32,31 @@ namespace OrderService.Business
 
         public async Task CreateOrderAsync(CreateOrderRequestModel request)
         {
+            var transaction = await _context.Database.BeginTransactionAsync();
+
             var newOrder = new Order
             {
                 UserId = request.UserId,
-                TotalPrice = request.TotalPrice
+                TotalPrice = request.TotalPrice,
             };
-            _context.Orders.Add(newOrder);
-            _context.SaveChanges();
+            await _context.Orders.AddAsync(newOrder);
+            await _context.SaveChangesAsync();
 
-            await PublishCreatedOrder(newOrder);
-        }
-
-        private async Task PublishCreatedOrder(Order order)
-        {
-            var requestBody = new StringContent(
-                JsonConvert.SerializeObject(new
+            var newEvent = new OutboxEvent(
+                new OrderCreated
                 {
-                    Message = new OrderCreated
-                    {
-                        OrderId = order.Id,
-                        UserId = order.UserId,
-                        TotalPrice = order.TotalPrice
-                    },
-                    Type = TypeManager.GetTypeString(typeof(OrderCreated))
-                }),
-                Encoding.UTF8,
-                "application/json");
+                    OrderId = newOrder.Id,
+                    UserId = request.UserId,
+                    Email = request.Email,
+                    UserAddress = request.UserAddress,
+                    TotalPrice = request.TotalPrice
+                },
+                Guid.NewGuid(),
+                DateTime.Now);
+            await _context.OutboxEvents.AddAsync(newEvent);
+            await _context.SaveChangesAsync();
 
-            var response = await _client.PostAsync("http://localhost:6001/outbox", requestBody);
-            response.EnsureSuccessStatusCode();
+            await transaction.CommitAsync();
         }
     }
 }

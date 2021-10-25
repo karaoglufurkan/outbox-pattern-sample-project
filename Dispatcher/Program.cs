@@ -1,8 +1,9 @@
+using Dispatcher.Data;
 using Dispatcher.Extentions;
-using Dispatcher.ExternalServices;
 using Dispatcher.Jobs;
-using MassTransit;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
@@ -36,8 +37,9 @@ namespace Dispatcher
 
                     services.ConfigureMassTransit(hostContext.Configuration);
 
-                    services.AddSingleton<OutboxService>();
-                    services.AddHttpClient<OutboxService>();
+                    services.AddDbContext<DispatcherDbContext>(builder => {
+                        builder.UseSqlServer(hostContext.Configuration.GetConnectionString("DemoDb"));
+                    });
                 });
                 // .ConfigureWebHostDefaults(configure => {
                     

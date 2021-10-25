@@ -5,29 +5,28 @@ namespace Shared.Models
 {
     public class OutboxEvent
     {
-        public OutboxEvent()
+        protected OutboxEvent()
         {
 
         }
 
-        public OutboxEvent(object message, string type, Guid eventId, DateTime eventDate)
+        public OutboxEvent(object message, Guid eventId, DateTime eventDate)
         {
-            Data = message.ToString();
-            // Type = message.GetType().FullName + ", " +
-            //        message.GetType().Assembly.GetName().Name;
-            Type = type;
+            Data = JsonConvert.SerializeObject(message);
+            Type = message.GetType().FullName + ", " +
+                   message.GetType().Assembly.GetName().Name;
             EventId = eventId;
             EventDate = eventDate;
             State = OutboxEventState.ReadyToSend;
             ModifiedDate = DateTime.Now;
         }
 
-        public long Id { get; set; }
-        public string Data { get; set; }
-        public string Type { get; set; }
-        public Guid EventId { get; set; }
-        public DateTime EventDate { get; set; }
-        public OutboxEventState State { get; set; }
+        public long Id { get; protected set; }
+        public string Data { get; protected set; }
+        public string Type { get; protected set; }
+        public Guid EventId { get; protected set; }
+        public DateTime EventDate { get; protected set; }
+        public OutboxEventState State { get; private set; }
         public DateTime ModifiedDate { get; set; }
 
         public void ChangeState(OutboxEventState state)

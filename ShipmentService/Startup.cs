@@ -1,21 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using OutboxService.Business;
-using OutboxService.Data;
+using ShipmentService.Data;
+using ShipmentService.Extentions;
 
-namespace OutboxService
+namespace ShipmentService
 {
     public class Startup
     {
@@ -29,28 +22,26 @@ namespace OutboxService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "OutboxService", Version = "v1" });
-            });
-            services.AddDbContext<OutboxDbContext>(options => {
-                options.UseSqlite(@"Data Source=outbox.db");
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShipmentService", Version = "v1" });
             });
 
-            services.AddScoped<IOutboxBusiness, OutboxBusiness>();
+            services.AddDbContext<ShipmentServiceDbContext>(builder => {
+                builder.UseSqlServer(Configuration.GetConnectionString("Demodb"));
+            });
+            services.ConfigureMassTransit(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OutboxDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                dbContext.Database.EnsureCreated();
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OutboxService v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShipmentService v1"));
             }
 
             app.UseHttpsRedirection();

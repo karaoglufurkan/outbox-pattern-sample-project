@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MailService.Data;
+using MailService.Extentions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,6 +35,12 @@ namespace MailService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MailService", Version = "v1" });
             });
+
+            services.AddDbContext<MailServiceDbContext>(builder => {
+                builder.UseSqlServer(Configuration.GetConnectionString("DemoDb"));
+            });
+
+            services.ConfigureMassTransit(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
