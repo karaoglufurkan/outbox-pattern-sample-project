@@ -1,8 +1,0 @@
-{
-    "files.exclude": {
-        "**/.vs": true,
-        "**/bin": true,
-        "**/obj": true
-    },
-    "explorer.compactFolders": false
-}

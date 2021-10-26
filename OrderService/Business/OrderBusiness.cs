@@ -26,8 +26,8 @@ namespace OrderService.Business
         public async Task<Order> GetOrderByIdAsync(int orderId)
         {
             return await _context
-            .Orders
-            .FirstOrDefaultAsync(x => x.Id == orderId);
+                .Orders
+                .FirstOrDefaultAsync(x => x.Id == orderId);
         }
 
         public async Task CreateOrderAsync(CreateOrderRequestModel request)
@@ -38,6 +38,7 @@ namespace OrderService.Business
             {
                 UserId = request.UserId,
                 TotalPrice = request.TotalPrice,
+                Email = request.Email
             };
             await _context.Orders.AddAsync(newOrder);
             await _context.SaveChangesAsync();
@@ -48,7 +49,6 @@ namespace OrderService.Business
                     OrderId = newOrder.Id,
                     UserId = request.UserId,
                     Email = request.Email,
-                    UserAddress = request.UserAddress,
                     TotalPrice = request.TotalPrice
                 },
                 Guid.NewGuid(),
@@ -57,6 +57,34 @@ namespace OrderService.Business
             await _context.SaveChangesAsync();
 
             await transaction.CommitAsync();
+        }
+
+        public async Task CancelOrderAsync(int orderId)
+        {
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(x => x.Id == orderId && !x.IsCancelled);
+
+            if (order == null)
+            {
+                throw new Exception("Order not found!");
+            }
+
+            order.IsCancelled = true;
+
+            await _context.OutboxEvents.AddAsync(
+                new OutboxEvent(
+                    new OrderCancelled
+                    {
+                        OrderId = orderId,
+                        Email = order.Email,
+                        UserId = order.UserId
+                    },
+                    Guid.NewGuid(),
+                    DateTime.Now
+                )
+            );
+
+            await _context.SaveChangesAsync();
         }
     }
 }

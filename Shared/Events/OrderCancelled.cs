@@ -1,12 +1,9 @@
-using System;
-
 namespace Shared.Events
 {
-    public class OrderCreated
+    public class OrderCancelled
     {
         public int OrderId { get; set; }
         public int UserId { get; set; }
         public string Email { get; set; }
-        public decimal TotalPrice { get; set; }
     }
 }

@@ -38,5 +38,13 @@ namespace OrderService.Controllers
             await _orderBusiness.CreateOrderAsync(request);
             return Ok();
         }
+
+        [HttpPost]
+        [Route("{orderId}/cancel")]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            await _orderBusiness.CancelOrderAsync(orderId);
+            return Ok();
+        }
     }
 }
