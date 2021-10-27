@@ -5,14 +5,22 @@
     <UserSecretsId>dotnet-Dispatcher-924AEE8B-04BA-468B-9E11-42D5D4B9AC4C</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MassTransit.AspNetCore" Version="7.2.3" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11" />
   </ItemGroup>
 
   <ItemGroup>

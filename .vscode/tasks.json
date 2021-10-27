@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/OrderService.csproj",
+                "${workspaceFolder}/OrderService/OrderService.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/OrderService.csproj",
+                "${workspaceFolder}/OrderService/OrderService.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/OrderService.csproj",
+                "${workspaceFolder}/OrderService/OrderService.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -45,14 +45,14 @@
                 "build"
             ],
             "dockerBuild": {
-                "tag": "orderservice:dev",
+                "tag": "transactionaloutboxmediumsample:dev",
                 "target": "base",
-                "dockerfile": "${workspaceFolder}/Dockerfile",
+                "dockerfile": "${workspaceFolder}/Dispatcher/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/OrderService.csproj"
+                "appProject": "${workspaceFolder}/Dispatcher/Dispatcher.csproj"
             }
         },
         {
@@ -62,13 +62,13 @@
                 "build"
             ],
             "dockerBuild": {
-                "tag": "orderservice:latest",
-                "dockerfile": "${workspaceFolder}/Dockerfile",
+                "tag": "transactionaloutboxmediumsample:latest",
+                "dockerfile": "${workspaceFolder}/Dispatcher/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/OrderService.csproj"
+                "appProject": "${workspaceFolder}/Dispatcher/Dispatcher.csproj"
             }
         },
         {
@@ -79,7 +79,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/OrderService.csproj",
+                "appProject": "${workspaceFolder}/Dispatcher/Dispatcher.csproj",
                 "enableDebugging": true
             }
         },
@@ -91,7 +91,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/OrderService.csproj"
+                "appProject": "${workspaceFolder}/Dispatcher/Dispatcher.csproj"
             }
         }
     ]

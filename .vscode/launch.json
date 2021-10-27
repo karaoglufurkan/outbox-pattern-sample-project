@@ -6,9 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/net5.0/MailService.dll",
+            "program": "${workspaceFolder}/OrderService/bin/Debug/net5.0/OrderService.dll",
             "args": [],
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/OrderService",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -32,7 +32,7 @@
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
             "netCore": {
-                "appProject": "${workspaceFolder}/MailService.csproj"
+                "appProject": "${workspaceFolder}/Dispatcher/Dispatcher.csproj"
             }
         }
     ]

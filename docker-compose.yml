@@ -1,0 +1,41 @@
+services:
+  rabbit-mq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    ports:
+      - 15672:15672
+  sql-server:
+    build:
+      context: .
+      dockerfile: ./DatabaseImage/Dockerfile
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=PassWord1234
+    ports:
+      - 1433:1433
+    hostname: sqlserver
+  order-service:
+    build:
+      context: .
+      dockerfile: ./OrderService/Dockerfile
+    ports:
+      - 5001:5001
+    depends_on:
+      - sql-server
+  mail-service:
+    build:
+      context: .
+      dockerfile: ./MailService/Dockerfile
+    ports:
+      - 5002:5002
+    depends_on:
+      - rabbit-mq
+      - sql-server
+  dispatcher:
+    build:
+      context: .
+      dockerfile: ./Dispatcher/Dockerfile
+    depends_on:
+      - rabbit-mq
+      - sql-server
+
