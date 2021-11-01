@@ -14,7 +14,7 @@ namespace Dispatcher.Extentions
 
             services.AddMassTransit(x =>
             {
-                x.SetKebabCaseEndpointNameFormatter();
+                x.SetKebabCaseEndpointNameFormatter(); //MassTransit queue'ları nasıl oluştursun?
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.ConfigureEndpoints(context);

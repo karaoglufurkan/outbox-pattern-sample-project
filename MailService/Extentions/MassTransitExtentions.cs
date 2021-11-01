@@ -15,8 +15,8 @@ namespace MailService.Extentions
 
             services.AddMassTransit(x =>
             {
-                x.AddConsumers(Assembly.GetExecutingAssembly());
-                x.SetKebabCaseEndpointNameFormatter();
+                x.AddConsumers(Assembly.GetExecutingAssembly()); //consumer'ları burada ekledik
+                x.SetKebabCaseEndpointNameFormatter(); //MassTransit queue'ları nasıl oluştursun?
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.ConfigureEndpoints(context);
