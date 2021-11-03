@@ -3,7 +3,7 @@
 
 This project is created for my medium article about transactional outbox pattern.
 
-You can access it here : [project-link]
+You can access it here : https://medium.com/@karaoglufurkan/net-i%CC%87le-transactional-outbox-pattern-i%CC%87mplementasyonu-e27a7e65c9b4
 
   
 
