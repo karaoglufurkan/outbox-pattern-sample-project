@@ -3,7 +3,7 @@
 
 This project is created for my medium article about transactional outbox pattern.
 
-You can access it here : https://medium.com/@karaoglufurkan/net-i%CC%87le-transactional-outbox-pattern-i%CC%87mplementasyonu-e27a7e65c9b4
+You can access it here : https://medium.com/@karaoglufurkan/transactional-outbox-pattern-neden-ve-nasil-fbead861e3c0
 
   
 
@@ -75,9 +75,9 @@ body:
 
 {
 
-"UserId" : int,
+"userId" : int,
 
-"TotalPrice": decimal,
+"totalPrice": decimal,
 
 "email" : string
 
@@ -101,7 +101,7 @@ root-url: localhost:5002
 
   
 
-Get MailQueues:
+Get MailQueue:
 
 ```
 
