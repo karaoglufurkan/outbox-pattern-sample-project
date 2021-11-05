@@ -30,45 +30,54 @@ namespace OrderService.Business
                 .FirstOrDefaultAsync(x => x.Id == orderId);
         }
 
-        public async Task CreateOrderAsync(CreateOrderRequestModel request)
+        public async Task<bool> CreateOrderAsync(CreateOrderRequestModel request)
         {
-            var transaction = await _context.Database.BeginTransactionAsync();
-
-            var newOrder = new Order
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                UserId = request.UserId,
-                TotalPrice = request.TotalPrice,
-                Email = request.Email
-            };
-            await _context.Orders.AddAsync(newOrder);
-            await _context.SaveChangesAsync();
-
-            var newEvent = new OutboxEvent(
-                new OrderCreated
+                try
                 {
-                    OrderId = newOrder.Id,
-                    UserId = request.UserId,
-                    Email = request.Email,
-                    TotalPrice = request.TotalPrice
-                },
-                Guid.NewGuid(),
-                DateTime.Now);
-            await _context.OutboxEvents.AddAsync(newEvent);
-            await _context.SaveChangesAsync();
+                    var newOrder = new Order
+                    {
+                        UserId = request.UserId,
+                        TotalPrice = request.TotalPrice,
+                        Email = request.Email
+                    };
+                    await _context.Orders.AddAsync(newOrder);
+                    await _context.SaveChangesAsync();
 
-            await transaction.CommitAsync();
+                    var newEvent = new OutboxEvent(
+                        new OrderCreated
+                        {
+                            OrderId = newOrder.Id,
+                            UserId = request.UserId,
+                            Email = request.Email,
+                            TotalPrice = request.TotalPrice
+                        },
+                        Guid.NewGuid(),
+                        DateTime.Now);
+                    await _context.OutboxEvents.AddAsync(newEvent);
+                    await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+            }
         }
 
         public async Task CancelOrderAsync(int orderId)
         {
             var order = await _context.Orders
                 .FirstOrDefaultAsync(x => x.Id == orderId && !x.IsCancelled);
-
             if (order == null)
             {
                 throw new Exception("Order not found!");
             }
-
             order.IsCancelled = true;
 
             await _context.OutboxEvents.AddAsync(

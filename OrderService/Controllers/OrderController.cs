@@ -35,8 +35,7 @@ namespace OrderService.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderRequestModel request)
         {
-            await _orderBusiness.CreateOrderAsync(request);
-            return Ok();
+            return await _orderBusiness.CreateOrderAsync(request) ? Ok() : new StatusCodeResult(500);
         }
 
         [HttpPost]

@@ -8,7 +8,7 @@ namespace OrderService.Business
     {
         Task<List<Order>> GetOrdersAsync();
         Task<Order> GetOrderByIdAsync(int orderId);
-        Task CreateOrderAsync(CreateOrderRequestModel request);
+        Task<bool> CreateOrderAsync(CreateOrderRequestModel request);
         Task CancelOrderAsync(int orderId);
 
     }
